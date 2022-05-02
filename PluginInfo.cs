@@ -6,7 +6,7 @@
     internal class PluginInfo
     {
         public const string GUID = "com.oekt.gorillatag.type";
-        public const string Name = "Gorilla Text";
+        public const string Name = "GorillaText";
         public const string Version = "1.0.0";
     }
 }

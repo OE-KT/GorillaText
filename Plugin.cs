@@ -19,7 +19,7 @@ namespace type
     {
         bool inRoom;
         public static Plugin instines;
-        GameObject obj = UnityEngine.Object.Instantiate<GameObject>(AssetBundle.LoadFromFile(Plugin.fileLocation + "\\mic\\hhh").LoadAsset<GameObject>("textconputer"));
+       
         public static string fileLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         bool modon;
         void OnEnable()
@@ -29,9 +29,9 @@ namespace type
 
             HarmonyPatches.ApplyHarmonyPatches();
             Utilla.Events.GameInitialized += OnGameInitialized;
-            modon = true;
-            if(modon)
-            obj.SetActive(true);
+            //modon = true;
+            //if(modon)
+            //obj.SetActive(true);
         }
 
         void OnDisable()
@@ -43,14 +43,14 @@ namespace type
             HarmonyPatches.RemoveHarmonyPatches();
             Utilla.Events.GameInitialized -= OnGameInitialized;
             modon = false;
-            if(modon == false)
-            obj.SetActive(false);
+            //if(modon == false)
+            //obj.SetActive(false);
         }
 
         void OnGameInitialized(object sender, EventArgs e)
         {
-           
-           
+
+            GameObject obj = UnityEngine.Object.Instantiate<GameObject>(AssetBundle.LoadFromFile(Plugin.fileLocation + "\\mic\\hhh").LoadAsset<GameObject>("textconputer"));
             obj.transform.position = new Vector3(-68.2598f, 11.394f, -83.8336f);
             obj.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
             obj.transform.rotation = Quaternion.Euler(0, 322.6407f, 0);
@@ -63,7 +63,7 @@ namespace type
                 button.gameObject.layer = 18;
                 button.gameObject.AddComponent<Class1>();
             }
-
+           
         }
 
         void Update()
@@ -79,10 +79,9 @@ namespace type
             /* This code will run regardless of if the mod is enabled*/
 
             inRoom = true;
-            if(modon)
-            {
-                obj.SetActive(true);
-            }
+           
+                //obj.SetActive(true);
+            
 
         }
 
@@ -92,10 +91,9 @@ namespace type
         {
             /* Deactivate your mod here */
             /* This code will run regardless of if the mod is enabled*/
-            if (modon)
-            {
-                obj.SetActive(false);
-            }
+            
+                //obj.SetActive(false);
+            
             inRoom = false;
         }
     }
