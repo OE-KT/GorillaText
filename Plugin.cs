@@ -17,11 +17,13 @@ namespace type
     [BepInPlugin(PluginInfo.GUID, PluginInfo.Name, PluginInfo.Version)]
     public class Plugin : BaseUnityPlugin
     {
-        bool inRoom;
+       static bool inRoom = false;
+       static bool ison;
+        static GameObject ds;
         public static Plugin instines;
        
         public static string fileLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        bool modon;
+       
         void OnEnable()
         {
             /* Set up your mod here */
@@ -29,9 +31,8 @@ namespace type
 
             HarmonyPatches.ApplyHarmonyPatches();
             Utilla.Events.GameInitialized += OnGameInitialized;
-            //modon = true;
-            //if(modon)
-            //obj.SetActive(true);
+            ison = true;
+            
         }
 
         void OnDisable()
@@ -42,9 +43,8 @@ namespace type
 
             HarmonyPatches.RemoveHarmonyPatches();
             Utilla.Events.GameInitialized -= OnGameInitialized;
-            modon = false;
-            //if(modon == false)
-            //obj.SetActive(false);
+            ison = false;
+            
         }
 
         void OnGameInitialized(object sender, EventArgs e)
@@ -63,7 +63,8 @@ namespace type
                 button.gameObject.layer = 18;
                 button.gameObject.AddComponent<Class1>();
             }
-           
+            obj.SetActive(false);
+            ds = obj;
         }
 
         void Update()
@@ -79,7 +80,7 @@ namespace type
             /* This code will run regardless of if the mod is enabled*/
 
             inRoom = true;
-           
+            Ative();
                 //obj.SetActive(true);
             
 
@@ -95,6 +96,19 @@ namespace type
                 //obj.SetActive(false);
             
             inRoom = false;
+            Ative();
+        }
+
+        void Ative()
+        {
+            if(inRoom && inRoom)
+            {
+                ds.SetActive(true);
+            }
+            if(!inRoom  || !inRoom)
+            {
+                ds.SetActive(false);
+            }
         }
     }
 }
