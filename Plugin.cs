@@ -5,6 +5,7 @@ using Utilla;
 using System.IO;
 using System.Reflection;
 using UnityEngine.UI;
+using BepInEx.Configuration;
 namespace type
 {
     /// <summary>
@@ -20,10 +21,17 @@ namespace type
        static bool inRoom = false;
        static bool ison;
         static GameObject ds;
-        public static Plugin instines;
-       
+        public static Plugin instines = new Plugin();
+        
         public static string fileLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-       
+        public static ConfigEntry<string> basecoler;
+        public static ConfigEntry<string> keybordcoler;
+        public static ConfigEntry<string> screencoler;
+        public static ConfigEntry<string> textColor;
+        Color basea;
+        Color KEYBORD;
+        Color screencolerdffd;
+        Color textd;
         void OnEnable()
         {
             /* Set up your mod here */
@@ -49,7 +57,7 @@ namespace type
 
         void OnGameInitialized(object sender, EventArgs e)
         {
-
+            
             GameObject obj = UnityEngine.Object.Instantiate<GameObject>(AssetBundle.LoadFromFile(Plugin.fileLocation + "\\mic\\hhh").LoadAsset<GameObject>("textconputer"));
             obj.transform.position = new Vector3(-68.2598f, 11.394f, -83.8336f);
             obj.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
@@ -63,8 +71,51 @@ namespace type
                 button.gameObject.layer = 18;
                 button.gameObject.AddComponent<Class1>();
             }
-            obj.SetActive(false);
+            
             ds = obj;
+            #region Config
+            basecoler = Config.Bind("Colors",      // The section under which the option is shown
+                                       "baseCol",  // The key of the configuration option in the configuration file
+                                       "#717175", // The default value
+                                       "The base color of the conputer");
+            keybordcoler = Config.Bind("Colors",      // The section under which the option is shown
+                                       "keybordCol",  // The key of the configuration option in the configuration file
+                                       "#ffffff", // The default value
+                                       "The keybord color of the conputer");
+            screencoler = Config.Bind("Colors",      // The section under which the option is shown
+                                       "screenCol",  // The key of the configuration option in the configuration file
+                                       "#184a17", // The default value 
+                                       "The screen color of the conputer");
+            textColor = Config.Bind("Colors",      // The section under which the option is shown
+                                       "textCol",  // The key of the configuration option in the configuration file
+                                       "#ffffff", // The default value
+                                       "The text color of the conputer");
+           
+            ColorUtility.TryParseHtmlString(basecoler.Value, out basea);
+            ColorUtility.TryParseHtmlString(keybordcoler.Value, out KEYBORD);
+            ColorUtility.TryParseHtmlString(screencoler.Value, out screencolerdffd);
+            ColorUtility.TryParseHtmlString(textColor.Value, out textd);
+            Console.WriteLine(basea);
+            Console.WriteLine(KEYBORD);
+            Console.WriteLine(screencolerdffd);
+            Console.WriteLine(textd);
+
+            #endregion
+            GameObject.Find("textconputer(Clone)/Cube").GetComponent<MeshRenderer>().material.color = basea;
+            GameObject.Find("textconputer(Clone)/Cube (1)").GetComponent<MeshRenderer>().material.color = basea;
+            GameObject.Find("textconputer(Clone)/Plane").GetComponent<MeshRenderer>().material.color = screencolerdffd;
+            GameObject.Find("textconputer(Clone)/Canvas/Text").gameObject.GetComponent<Text>().color = textd;
+            
+          
+            foreach (Transform button in allChildren)
+            {
+                if(button.gameObject.name != "button")
+               button.gameObject.GetComponent<MeshRenderer>().material.color = KEYBORD;
+                
+            }
+            obj.SetActive(false);
+
+
         }
 
         void Update()
@@ -81,6 +132,7 @@ namespace type
 
             inRoom = true;
             Ative();
+
                 //obj.SetActive(true);
             
 
@@ -101,14 +153,36 @@ namespace type
 
         void Ative()
         {
-            if(inRoom && inRoom)
+            if(inRoom)
             {
                 ds.SetActive(true);
             }
-            if(!inRoom  || !inRoom)
+            if(!inRoom)
             {
                 ds.SetActive(false);
             }
+        }
+       public void setupconfig()
+        {
+            ColorUtility.TryParseHtmlString(basecoler.Value, out basea);
+            ColorUtility.TryParseHtmlString(keybordcoler.Value, out KEYBORD);
+            ColorUtility.TryParseHtmlString(screencoler.Value, out screencolerdffd);
+            ColorUtility.TryParseHtmlString(textColor.Value, out textd);
+            GameObject.Find("textconputer(Clone)/Cube").GetComponent<MeshRenderer>().material.color = basea;
+            GameObject.Find("textconputer(Clone)/Cube (1)").GetComponent<MeshRenderer>().material.color = basea;
+            GameObject.Find("textconputer(Clone)/Plane").GetComponent<MeshRenderer>().material.color = screencolerdffd;
+            GameObject.Find("textconputer(Clone)/Canvas/Text").gameObject.GetComponent<Text>().color = textd;
+            GameObject buttonPan = GameObject.Find("textconputer(Clone)/keybord/button");
+            Transform[] allChildren;
+            allChildren = buttonPan.GetComponentsInChildren<Transform>();
+
+            foreach (Transform button in allChildren)
+            {
+                if (button.gameObject.name != "button")
+                    button.gameObject.GetComponent<MeshRenderer>().material.color = KEYBORD;
+
+            }
+            
         }
     }
 }
